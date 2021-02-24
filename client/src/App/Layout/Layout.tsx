@@ -9,7 +9,7 @@ export default function Layout({ children }: Props) {
   return (
     <div>
       <div className="py-5 px-10 flex items-center justify-between">
-        <div className="text-2xl font-bold">Tasker</div>
+        <div className="text-2xl font-bold">Lounge Board</div>
         <div>
           <button onClick={logOut} className="font-bold">
             Log Out

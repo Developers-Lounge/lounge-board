@@ -1,0 +1,26 @@
+{
+  "name": "lounge-board",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "install": "npm run install:client && npm run install:server && npm run build && npm run migrate",
+    "install:client": "cd client && npm install",
+    "install:server": "cd server && npm install",
+    "build": "npm run build:client && npm run build:server",
+    "build:client": "cd client && npm run build",
+    "build:server": "cd server && npm run build",
+    "migrate": "cd server && npm run migrate",
+    "start": "cd server && npm run start:prod"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Developers-Lounge/lounge-board.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Developers-Lounge/lounge-board/issues"
+  },
+  "homepage": "https://github.com/Developers-Lounge/lounge-board#readme"
+}
