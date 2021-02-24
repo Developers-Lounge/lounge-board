@@ -22,5 +22,10 @@
   "bugs": {
     "url": "https://github.com/Developers-Lounge/lounge-board/issues"
   },
-  "homepage": "https://github.com/Developers-Lounge/lounge-board#readme"
+  "homepage": "https://github.com/Developers-Lounge/lounge-board#readme",
+  "devDependencies": {
+    "@commitlint/cli": "^12.0.0",
+    "@commitlint/config-conventional": "^12.0.0",
+    "husky": "^5.1.1"
+  }
 }
