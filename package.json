@@ -8,7 +8,8 @@
     "build:client": "cd client && npm install && npm run build",
     "build:server": "cd server && npm install && npm run build",
     "migrate": "cd server && npm run migrate",
-    "start": "cd server && npm run start:prod"
+    "start": "cd server && npm run start:prod",
+    "release": "standard-version"
   },
   "repository": {
     "type": "git",
@@ -23,6 +24,7 @@
   "devDependencies": {
     "@commitlint/cli": "12.0.0",
     "@commitlint/config-conventional": "12.0.0",
-    "husky": "5.1.1"
+    "husky": "5.1.1",
+    "standard-version": "9.1.1"
   }
 }
