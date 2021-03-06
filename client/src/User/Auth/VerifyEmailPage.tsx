@@ -26,8 +26,10 @@ export default function VerifyEmailPage() {
 
   const [verifyEmail] = useMutation(verifyEmailMutation, {
     onCompleted({ verifyEmail }) {
-      if (verifyEmail) login(verifyEmail)
-      else setCantVerify(true)
+      login(verifyEmail)
+    },
+    onError() {
+      setCantVerify(true)
     },
   })
 

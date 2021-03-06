@@ -7,7 +7,8 @@ import { LoginDto, RegisterDto, ResetPasswordDto } from 'auth/auth.dto';
 import { decode } from 'common/jwt';
 import { sendConfirmationDelayMs } from 'common/constants';
 import { AuthMailer } from 'auth/auth.mailer';
-import { UserRepo } from 'user/user.repo';
+import { UserService } from 'user/user.service';
+import {User} from "user/user.entity";
 
 const encryptPassword = async (password: string) => {
   const salt = await bcrypt.genSalt(10);
@@ -19,7 +20,7 @@ export class AuthService {
   constructor(
     private authMailer: AuthMailer,
     private jwtService: JwtService,
-    private userRepo: UserRepo,
+    private userService: UserService,
   ) {}
 
   signToken(user: { id: number }) {
@@ -29,7 +30,7 @@ export class AuthService {
   }
 
   async login(args: LoginDto): Promise<LoginResponse> {
-    const user = await this.userRepo.findByUsernameOrEmail(
+    const user = await this.userService.findByUsernameOrEmail(
       args.usernameOrEmail,
     );
 
@@ -53,7 +54,7 @@ export class AuthService {
 
   async register(args: RegisterDto): Promise<RegisterResponse> {
     try {
-      const user = await this.userRepo.create({
+      const user = await this.userService.create({
         ...args,
         password: await encryptPassword(args.password),
       });
@@ -83,14 +84,14 @@ export class AuthService {
 
     const { email } = data;
 
-    const user = await this.userRepo.findByEmail(email);
+    const user = await this.userService.findByEmail(email);
     if (!user)
       throw new Exception(
         HttpStatus.UNPROCESSABLE_ENTITY,
         'Reset password token is invalid',
       );
 
-    await this.userRepo.updateById(user.id, {
+    await this.userService.updateById(user.id, {
       confirmedAt: new Date(),
     });
 
@@ -101,15 +102,15 @@ export class AuthService {
   }
 
   async isUsernameFree(username: string): Promise<boolean> {
-    return !(await this.userRepo.findByUsername(username));
+    return !(await this.userService.findByUsername(username));
   }
 
   async isEmailFree(email: string): Promise<boolean> {
-    return !(await this.userRepo.findByEmail(email));
+    return !(await this.userService.findByEmail(email));
   }
 
   async sendEmailConfirmation(email: string): Promise<boolean> {
-    const user = await this.userRepo.findByEmail(email);
+    const user = await this.userService.findByEmail(email);
 
     if (!user)
       throw new Exception(
@@ -129,7 +130,7 @@ export class AuthService {
     if (sentAt && now.getTime() - sentAt.getTime() < sendConfirmationDelayMs)
       throw new Exception(HttpStatus.TOO_MANY_REQUESTS, 'Too many requests');
 
-    await this.userRepo.updateByEmail(email, {
+    await this.userService.updateByEmail(email, {
       confirmationSentAt: now,
     });
 
@@ -139,7 +140,7 @@ export class AuthService {
   }
 
   async sendResetPassword(email: string): Promise<boolean> {
-    const user = await this.userRepo.findByEmail(email);
+    const user = await this.userService.findByEmail(email);
 
     if (!user)
       throw new Exception(
@@ -153,7 +154,7 @@ export class AuthService {
     if (sentAt && now.getTime() - sentAt.getTime() < sendConfirmationDelayMs)
       throw new Exception(HttpStatus.TOO_MANY_REQUESTS, 'Too many requests');
 
-    await this.userRepo.updateByEmail(email, {
+    await this.userService.updateByEmail(email, {
       resetPasswordSentAt: now,
     });
 
@@ -167,15 +168,17 @@ export class AuthService {
     password,
   }: ResetPasswordDto): Promise<LoginResponse> {
     const data = decode(token);
-    if (!data || typeof data !== 'object' || typeof data.email !== 'string')
+    let user: User | undefined
+    if (data && typeof data === 'object' && typeof data.email === 'string')
+      user = await this.userService.findByEmail(data.email)
+
+    if (!user)
       throw new Exception(
         HttpStatus.UNPROCESSABLE_ENTITY,
         'Reset password token is invalid',
       );
 
-    const { email } = data;
-
-    const user = await this.userRepo.updateByEmail(email, {
+    await this.userService.updateById(user.id, {
       password: await encryptPassword(password),
     });
 

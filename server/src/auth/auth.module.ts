@@ -7,9 +7,7 @@ import { JwtStrategy } from './jwt.strategy';
 import { AuthResolver } from './auth.resolver';
 import { AuthMailer } from 'auth/auth.mailer';
 import { UserModule } from 'user/user.module';
-import { UserRepo } from 'user/user.repo';
-import { PrismaModule } from 'prisma/prisma.module';
-import { PrismaService } from 'prisma/prisma.service';
+import { UserService } from 'user/user.service';
 
 @Module({
   imports: [
@@ -18,7 +16,6 @@ import { PrismaService } from 'prisma/prisma.service';
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '60s' },
     }),
-    PrismaModule,
     UserModule,
   ],
   providers: [
@@ -26,8 +23,7 @@ import { PrismaService } from 'prisma/prisma.service';
     AuthResolver,
     JwtStrategy,
     AuthMailer,
-    PrismaService,
-    UserRepo,
+    UserService,
   ],
   exports: [AuthService, JwtModule, AuthMailer],
 })

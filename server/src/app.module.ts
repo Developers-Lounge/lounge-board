@@ -6,6 +6,9 @@ import { AuthModule } from 'auth/auth.module';
 import { GraphQLError } from 'graphql';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from 'auth/jwt-auth.guard';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from './user/user.entity';
+import {UserModule} from "user/user.module";
 
 @Module({
   imports: [
@@ -23,6 +26,11 @@ import { JwtAuthGuard } from 'auth/jwt-auth.guard';
           message: error.extensions.exception.message || error.message,
         };
       },
+    }),
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      entities: [User],
+      url: process.env.DATABASE_URL,
     }),
     AuthModule,
   ],
