@@ -2,7 +2,7 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { LoginDto, RegisterDto, ResetPasswordDto } from 'auth/auth.dto';
 import { LoginResponse, RegisterResponse } from 'graphql-schema';
 import { AuthService } from 'auth/auth.service';
-import { Public } from 'common/decorators/public.decorator';
+import { Public } from 'lib/decorators/public.decorator';
 
 @Resolver('Auth')
 export class AuthResolver {
@@ -16,8 +16,8 @@ export class AuthResolver {
 
   @Public()
   @Mutation('register')
-  register(@Args('input') args: RegisterDto): Promise<RegisterResponse> {
-    return this.authService.register(args);
+  async register(@Args('input') args: RegisterDto): Promise<RegisterResponse> {
+    return await this.authService.register(args);
   }
 
   @Public()

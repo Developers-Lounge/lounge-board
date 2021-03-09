@@ -14,16 +14,19 @@ import ResendConfirmationInstructionsPage from 'User/Auth/ResendConfirmationInst
 const RegisterSchema = yup.object({
   username: yup
     .string()
+    .label('Username')
+    .min(3)
     .required()
     .test('unique-username', 'Username is already taken', checkUsername),
   email: yup
     .string()
+    .label('Email')
     .email()
     .required()
     .test('unique-email', 'Email is already taken', checkEmail),
-  password: yup.string().min(6).required(),
-  firstName: yup.string().required(),
-  lastName: yup.string().required(),
+  password: yup.string().label('Password').min(6).required(),
+  firstName: yup.string().label('First name').required(),
+  lastName: yup.string().label('Last name').required(),
 })
 
 export default function SignUpPage() {

@@ -11,8 +11,8 @@ import { login as acceptLogin } from 'User/service'
 import { loginMutation } from 'User/queries'
 
 const LoginSchema = yup.object({
-  usernameOrEmail: yup.string().required(),
-  password: yup.string().min(6).required(),
+  usernameOrEmail: yup.string().label('Username or email').min(3).required(),
+  password: yup.string().label('Password').min(6).required(),
 })
 
 export default function SignInPage() {

@@ -7,11 +7,12 @@ import { GraphQLError } from 'graphql';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from 'auth/jwt-auth.guard';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './user/user.entity';
-import {UserModule} from "user/user.module";
+import { TestsController } from 'tests/tests.controller';
+import { env, typeORMConfig } from 'config';
 
 @Module({
   imports: [
+    AuthModule,
     ConfigModule.forRoot(),
     GraphQLModule.forRoot({
       typePaths: ['./**/*.graphql'],
@@ -27,12 +28,7 @@ import {UserModule} from "user/user.module";
         };
       },
     }),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      entities: [User],
-      url: process.env.DATABASE_URL,
-    }),
-    AuthModule,
+    TypeOrmModule.forRoot(typeORMConfig),
   ],
   providers: [
     {
@@ -40,5 +36,6 @@ import {UserModule} from "user/user.module";
       useClass: JwtAuthGuard,
     },
   ],
+  controllers: env.test ? [TestsController] : [],
 })
 export class AppModule {}

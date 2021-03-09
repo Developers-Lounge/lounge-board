@@ -1,19 +1,17 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Exception } from 'common/Exception';
-import * as bcrypt from 'bcrypt';
+import { Exception } from 'lib/Exception';
 import { LoginResponse, RegisterResponse } from 'graphql-schema';
 import { LoginDto, RegisterDto, ResetPasswordDto } from 'auth/auth.dto';
-import { decode } from 'common/jwt';
-import { sendConfirmationDelayMs } from 'common/constants';
+import { decode } from 'lib/jwt';
+import {
+  delayBetweenSendingEmailConfirmationMs,
+  delayBetweenSendingResetPasswordMs,
+} from 'config';
 import { AuthMailer } from 'auth/auth.mailer';
 import { UserService } from 'user/user.service';
-import {User} from "user/user.entity";
-
-const encryptPassword = async (password: string) => {
-  const salt = await bcrypt.genSalt(10);
-  return await bcrypt.hash(password, salt);
-};
+import { User } from 'user/user.entity';
+import { comparePasswords, encryptPassword } from 'lib/password';
 
 @Injectable()
 export class AuthService {
@@ -34,7 +32,7 @@ export class AuthService {
       args.usernameOrEmail,
     );
 
-    if (!user || !(await bcrypt.compare(args.password, user.password)))
+    if (!user || !(await comparePasswords(args.password, user.password)))
       throw new Exception(
         HttpStatus.NOT_FOUND,
         'Email or password is incorrect',
@@ -127,7 +125,10 @@ export class AuthService {
     const sentAt = user.confirmationSentAt;
     const now = new Date();
 
-    if (sentAt && now.getTime() - sentAt.getTime() < sendConfirmationDelayMs)
+    if (
+      sentAt &&
+      now.getTime() - sentAt.getTime() < delayBetweenSendingEmailConfirmationMs
+    )
       throw new Exception(HttpStatus.TOO_MANY_REQUESTS, 'Too many requests');
 
     await this.userService.updateByEmail(email, {
@@ -151,7 +152,10 @@ export class AuthService {
     const sentAt = user.resetPasswordSentAt;
     const now = new Date();
 
-    if (sentAt && now.getTime() - sentAt.getTime() < sendConfirmationDelayMs)
+    if (
+      sentAt &&
+      now.getTime() - sentAt.getTime() < delayBetweenSendingResetPasswordMs
+    )
       throw new Exception(HttpStatus.TOO_MANY_REQUESTS, 'Too many requests');
 
     await this.userService.updateByEmail(email, {
@@ -168,9 +172,9 @@ export class AuthService {
     password,
   }: ResetPasswordDto): Promise<LoginResponse> {
     const data = decode(token);
-    let user: User | undefined
+    let user: User | undefined;
     if (data && typeof data === 'object' && typeof data.email === 'string')
-      user = await this.userService.findByEmail(data.email)
+      user = await this.userService.findByEmail(data.email);
 
     if (!user)
       throw new Exception(

@@ -55,7 +55,7 @@ export default function ResendConfirmationInstructionsPage({
     errorPolicy: 'all',
     onCompleted: (data) => {
       if (data) setEmailSent(true)
-      onSendSettled
+      onSendSettled()
     },
     onError: onSendSettled,
   })

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { sendMail } from 'common/mailer';
-import { signJWT } from 'common/jwt';
-import { resetPasswordLink, verifyEmailLink } from 'common/links';
+import { sendMail } from 'lib/mailer';
+import { signJWT } from 'lib/jwt';
+import { resetPasswordLink, verifyEmailLink } from 'lib/links';
 
 @Injectable()
 export class AuthMailer {
