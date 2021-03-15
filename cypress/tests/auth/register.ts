@@ -1,4 +1,4 @@
-import users from 'fixtures/db/user'
+import users from 'fixtures/db/user'.
 
 describe("User Sign-up", () => {
   beforeEach(() => {
@@ -62,7 +62,7 @@ describe("User Sign-up", () => {
     cy.location('pathname').should('eq', '/')
   });
 
-  it.only('should check inputs', () => {
+  it('should check inputs', () => {
     cy.get("button[type='submit']").as('submit').click()
 
     ;['Username', 'First name', 'Last name', 'Email', 'Password'].forEach((label) => {
