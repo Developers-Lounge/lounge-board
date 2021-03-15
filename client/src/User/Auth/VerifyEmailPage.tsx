@@ -3,9 +3,8 @@ import { useLocation } from 'react-router-dom'
 import ResendConfirmationInstructionsPage from 'User/Auth/ResendConfirmationInstructionsPage'
 import jwtDecode from 'jwt-decode'
 import Spinner from 'Shared/Spinner'
-import { useMutation } from '@apollo/client'
-import { verifyEmailMutation } from 'User/queries'
 import { login } from 'User/service'
+import { useVerifyEmailMutation } from 'generated/graphql'
 
 const tokenParamName = 'token'
 
@@ -24,7 +23,7 @@ export default function VerifyEmailPage() {
 
   const [cantVerify, setCantVerify] = React.useState(false)
 
-  const [verifyEmail] = useMutation(verifyEmailMutation, {
+  const [verifyEmail] = useVerifyEmailMutation({
     onCompleted({ verifyEmail }) {
       login(verifyEmail)
     },
@@ -34,8 +33,8 @@ export default function VerifyEmailPage() {
   })
 
   React.useEffect(() => {
-    verifyEmail({ variables: { token } })
-  }, [email])
+    if (token) verifyEmail({ variables: { token } })
+  }, [email, token])
 
   if (!email || cantVerify)
     return (

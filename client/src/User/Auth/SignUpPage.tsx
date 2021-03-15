@@ -5,11 +5,10 @@ import routes from 'routes'
 import * as yup from 'yup'
 import { useForm } from 'utils/useForm'
 import FloatingInput from 'Shared/Form/FloatingInput'
-import { useMutation } from '@apollo/client'
 import { checkEmail, checkUsername } from 'User/service'
 import Button from 'Shared/Button'
-import { registerMutation } from 'User/queries'
 import ResendConfirmationInstructionsPage from 'User/Auth/ResendConfirmationInstructionsPage'
+import { useRegisterMutation } from 'generated/graphql'
 
 const RegisterSchema = yup.object({
   username: yup
@@ -32,12 +31,9 @@ const RegisterSchema = yup.object({
 export default function SignUpPage() {
   const [registeredEmail, setRegisteredEmail] = React.useState<string>()
 
-  const [register, { loading, error, data: registered }] = useMutation(
-    registerMutation,
-    {
-      errorPolicy: 'all',
-    },
-  )
+  const [register, { loading, error, data: registered }] = useRegisterMutation({
+    errorPolicy: 'all',
+  })
 
   const form = useForm({ schema: RegisterSchema, mode: 'onChange' })
 

@@ -5,9 +5,8 @@ import routes from 'routes'
 import * as yup from 'yup'
 import { useForm } from 'utils/useForm'
 import FloatingInput from 'Shared/Form/FloatingInput'
-import { useMutation } from '@apollo/client'
 import Button from 'Shared/Button'
-import { sendResetPasswordMutation } from 'User/queries'
+import { useSendResetPasswordMutation } from 'generated/graphql'
 
 const LoginSchema = yup.object({
   email: yup.string().email().required(),
@@ -17,15 +16,12 @@ export default function ForgotPasswordPage() {
   const [email, setEmail] = React.useState<string>()
   const [isSent, setSent] = React.useState(false)
 
-  const [sendResetPassword, { loading, error }] = useMutation(
-    sendResetPasswordMutation,
-    {
-      errorPolicy: 'all',
-      onCompleted(data) {
-        if (data) setSent(true)
-      },
+  const [sendResetPassword, { loading, error }] = useSendResetPasswordMutation({
+    errorPolicy: 'all',
+    onCompleted(data) {
+      if (data) setSent(true)
     },
-  )
+  })
 
   const form = useForm({ schema: LoginSchema })
 

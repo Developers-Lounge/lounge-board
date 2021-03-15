@@ -1,13 +1,11 @@
 import React from 'react'
-import AuthLayout from 'User/Auth/AuthLayout'
 import Button from 'Shared/Button'
-import { useMutation } from '@apollo/client'
-import { sendEmailConfirmationMutation } from 'User/queries'
 import * as yup from 'yup'
 import { useForm } from 'utils/useForm'
 import FloatingInput from 'Shared/Form/FloatingInput'
 import { Link } from 'react-router-dom'
 import routes from 'routes'
+import { useSendEmailConfirmationMutation } from 'generated/graphql'
 
 export const sendConfirmationDelayMs = 5000
 
@@ -51,7 +49,7 @@ export default function ResendConfirmationInstructionsPage({
   const [
     sendConfirmationPerform,
     { loading: sendConfirmationLoading, error: sendConfirmationError },
-  ] = useMutation(sendEmailConfirmationMutation, {
+  ] = useSendEmailConfirmationMutation({
     errorPolicy: 'all',
     onCompleted: (data) => {
       if (data) setEmailSent(true)

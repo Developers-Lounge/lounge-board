@@ -7,9 +7,8 @@ import FloatingInput from 'Shared/Form/FloatingInput'
 import AuthLayout from 'User/Auth/AuthLayout'
 import Button from 'Shared/Button'
 import routes from 'routes'
-import { useMutation } from '@apollo/client'
-import { resetPasswordMutation } from 'User/queries'
 import { login as acceptLogin } from 'User/service'
+import { useResetPasswordMutation } from 'generated/graphql'
 
 const ResetPasswordSchema = yup.object({
   password: yup.string().min(6).required(),
@@ -28,20 +27,20 @@ export default function ResetPasswordPage() {
     }
   }
 
-  const [resetPassword, { loading, error: resetPasswordError }] = useMutation(
-    resetPasswordMutation,
-    {
-      errorPolicy: 'all',
-      onCompleted(data) {
-        if (data) acceptLogin(data.resetPassword)
-      },
+  const [
+    resetPassword,
+    { loading, error: resetPasswordError },
+  ] = useResetPasswordMutation({
+    errorPolicy: 'all',
+    onCompleted(data) {
+      if (data) acceptLogin(data.resetPassword)
     },
-  )
+  })
 
   const form = useForm({ schema: ResetPasswordSchema })
 
   const submit = () => {
-    if (!email) return
+    if (!email || !token) return
     resetPassword({ variables: { ...form.getValues(), token } })
   }
 

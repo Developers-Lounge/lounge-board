@@ -2,24 +2,23 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import AuthLayout from 'User/Auth/AuthLayout'
 import routes from 'routes'
-import * as yup from 'yup'
+import { object, string } from 'yup'
 import { useForm } from 'utils/useForm'
 import FloatingInput from 'Shared/Form/FloatingInput'
-import { useMutation } from '@apollo/client'
 import Button from 'Shared/Button'
 import { login as acceptLogin } from 'User/service'
-import { loginMutation } from 'User/queries'
+import { useLoginMutation } from 'generated/graphql'
 
-const LoginSchema = yup.object({
-  usernameOrEmail: yup.string().label('Username or email').min(3).required(),
-  password: yup.string().label('Password').min(6).required(),
+const LoginSchema = object({
+  usernameOrEmail: string().label('Username or email').min(3).required(),
+  password: string().label('Password').min(6).required(),
 })
 
 export default function SignInPage() {
-  const [login, { loading, error }] = useMutation(loginMutation, {
+  const [login, { loading, error }] = useLoginMutation({
     errorPolicy: 'all',
-    update(cache, { data: { login } }) {
-      acceptLogin(login)
+    update(cache, { data }) {
+      if (data) acceptLogin(data.login)
     },
   })
 

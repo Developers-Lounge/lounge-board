@@ -2,8 +2,8 @@ import { setItem, useLocalStorage } from 'utils/localStorage'
 import { CurrentUser } from './types'
 import { serverClient } from 'utils/apolloClient'
 import debounce from 'debounce-promise'
-import { isEmailFreeQuery, isUsernameFreeQuery } from 'User/queries'
 import * as yup from 'yup'
+import { IsEmailFreeDocument, IsUsernameFreeDocument } from 'generated/graphql'
 
 const storageKey = 'currentUser'
 
@@ -60,11 +60,11 @@ export const logOut = () => {
   setCurrentUser()
 }
 
-export const checkUsername = debounce(async (username: string | undefined) => {
+export const checkUsername = debounce(async (username: unknown) => {
   if (!username) return true
 
   const res = await serverClient.query<{ isUsernameFree: boolean }>({
-    query: isUsernameFreeQuery,
+    query: IsUsernameFreeDocument,
     variables: { username },
   })
   return res.data.isUsernameFree
@@ -74,7 +74,7 @@ const yupEmail = yup.object({
   email: yup.string().email().required(),
 })
 
-export const checkEmail = debounce(async (email: string | undefined) => {
+export const checkEmail = debounce(async (email: unknown) => {
   try {
     yupEmail.validateSync({ email })
   } catch (err) {
@@ -82,7 +82,7 @@ export const checkEmail = debounce(async (email: string | undefined) => {
   }
 
   const res = await serverClient.query<{ isEmailFree: boolean }>({
-    query: isEmailFreeQuery,
+    query: IsEmailFreeDocument,
     variables: { email },
   })
   return res.data.isEmailFree

@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { SchemaOf } from 'yup'
+import { Schema } from 'yup'
 import { useForm as useFormOriginal } from 'react-hook-form'
 import {
   FieldValues,
@@ -7,7 +7,7 @@ import {
   UseFormOptions,
 } from 'react-hook-form/dist/types'
 
-const useYupValidationResolver = <T>(validationSchema?: SchemaOf<T>) =>
+const useYupValidationResolver = <T, C>(validationSchema?: Schema<T, C>) =>
   useCallback(
     async (data) => {
       if (!validationSchema) return { values: data, errors: {} }
@@ -44,14 +44,21 @@ const useYupValidationResolver = <T>(validationSchema?: SchemaOf<T>) =>
   )
 
 export function useForm<
+  T,
+  C,
   TFieldValues extends FieldValues = FieldValues,
   TContext extends Record<string, unknown> = Record<string, unknown>
 >({
   schema,
   ...params
 }: UseFormOptions<TFieldValues, TContext> & {
-  schema?: SchemaOf<unknown>
-} = {}): UseFormMethods<TFieldValues> {
+  schema?: Schema<T, C>
+} = {}): UseFormMethods<
+  Exclude<ReturnType<Schema<T, C>['validateSync']>, undefined>
+> {
   const resolver = useYupValidationResolver(schema)
-  return useFormOriginal<TFieldValues, TContext>({ ...params, resolver })
+  return useFormOriginal({
+    ...params,
+    resolver,
+  }) as any // eslint-disable-line
 }
