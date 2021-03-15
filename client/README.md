@@ -2,7 +2,7 @@
 
 npm start to start dev, npm run build to build, npm run test - no tests yet
 
-Structured by "domains", little bit messy for now.
+Structured by "domains"
 
 Uses tailwind for styling, I suggest to install webstorm or vscode plugin for it to suggest classes.
 

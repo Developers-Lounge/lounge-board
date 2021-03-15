@@ -1,9 +1,9 @@
 import React from 'react'
 import { useLocation } from 'react-router-dom'
-import ResendConfirmationInstructionsPage from 'User/Auth/ResendConfirmationInstructionsPage'
+import ResendConfirmationInstructionsPage from 'components/User/Auth/ResendConfirmationInstructionsPage'
 import jwtDecode from 'jwt-decode'
-import Spinner from 'Shared/Spinner'
-import { login } from 'User/service'
+import Spinner from 'components/Shared/Spinner'
+import { login } from 'components/User/service'
 import { useVerifyEmailMutation } from 'generated/graphql'
 
 const tokenParamName = 'token'

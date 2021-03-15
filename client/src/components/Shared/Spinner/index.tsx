@@ -1,6 +1,6 @@
 import React from 'react'
 import cn from 'classnames'
-import style from './style.module.css'
+import style from 'components/Shared/Spinner/style.module.css'
 
 type Props = {
   className?: string

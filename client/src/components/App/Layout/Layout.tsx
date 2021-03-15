@@ -1,5 +1,5 @@
 import React from 'react'
-import { logOut } from 'User/service'
+import { logOut } from 'components/User/service'
 
 type Props = {
   children: React.ReactNode

@@ -1,5 +1,5 @@
 import React from 'react'
-import ErrorMessage from 'Shared/Form/ErrorMessage'
+import ErrorMessage from 'components/Shared/Form/ErrorMessage'
 import { UseFormMethods } from 'react-hook-form'
 import cn from 'classnames'
 

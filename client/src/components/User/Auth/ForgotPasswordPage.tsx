@@ -1,11 +1,11 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import AuthLayout from 'User/Auth/AuthLayout'
+import AuthLayout from 'components/User/Auth/AuthLayout'
 import routes from 'routes'
 import * as yup from 'yup'
 import { useForm } from 'utils/useForm'
-import FloatingInput from 'Shared/Form/FloatingInput'
-import Button from 'Shared/Button'
+import FloatingInput from 'components/Shared/Form/FloatingInput'
+import Button from 'components/Shared/Button'
 import { useSendResetPasswordMutation } from 'generated/graphql'
 
 const LoginSchema = yup.object({

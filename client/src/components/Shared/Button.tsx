@@ -1,5 +1,5 @@
 import React from 'react'
-import Spinner from 'Shared/Spinner'
+import Spinner from 'components/Shared/Spinner'
 
 interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode

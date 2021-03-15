@@ -1,13 +1,13 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import AuthLayout from 'User/Auth/AuthLayout'
+import AuthLayout from 'components/User/Auth/AuthLayout'
 import routes from 'routes'
 import * as yup from 'yup'
 import { useForm } from 'utils/useForm'
-import FloatingInput from 'Shared/Form/FloatingInput'
-import { checkEmail, checkUsername } from 'User/service'
-import Button from 'Shared/Button'
-import ResendConfirmationInstructionsPage from 'User/Auth/ResendConfirmationInstructionsPage'
+import FloatingInput from 'components/Shared/Form/FloatingInput'
+import { checkEmail, checkUsername } from 'components/User/service'
+import Button from 'components/Shared/Button'
+import ResendConfirmationInstructionsPage from 'components/User/Auth/ResendConfirmationInstructionsPage'
 import { useRegisterMutation } from 'generated/graphql'
 
 const RegisterSchema = yup.object({

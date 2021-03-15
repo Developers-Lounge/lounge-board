@@ -1,5 +1,5 @@
 import { setItem, useLocalStorage } from 'utils/localStorage'
-import { CurrentUser } from './types'
+import { CurrentUser } from 'components/User/types'
 import { serverClient } from 'utils/apolloClient'
 import debounce from 'debounce-promise'
 import * as yup from 'yup'

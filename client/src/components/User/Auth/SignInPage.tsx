@@ -1,12 +1,12 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import AuthLayout from 'User/Auth/AuthLayout'
+import AuthLayout from 'components/User/Auth/AuthLayout'
 import routes from 'routes'
 import { object, string } from 'yup'
 import { useForm } from 'utils/useForm'
-import FloatingInput from 'Shared/Form/FloatingInput'
-import Button from 'Shared/Button'
-import { login as acceptLogin } from 'User/service'
+import FloatingInput from 'components/Shared/Form/FloatingInput'
+import Button from 'components/Shared/Button'
+import { login as acceptLogin } from 'components/User/service'
 import { useLoginMutation } from 'generated/graphql'
 
 const LoginSchema = object({

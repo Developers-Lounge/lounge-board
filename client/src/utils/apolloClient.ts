@@ -1,6 +1,6 @@
 import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
-import { getCurrentUser } from 'User/service'
+import { getCurrentUser } from 'components/User/service'
 
 const httpLink = createHttpLink({
   uri: process.env.REACT_APP_SERVER_GRAPHQL_URL,
